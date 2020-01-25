@@ -40,6 +40,93 @@ local checkBust = function(sum)
   return sum > 21 or sum < 1
 end
 
+-- Perform a step in the environment
+environ.step = function(s,a)
+  -- Current state
+
+  local sPrime = {}
+
+  --[[
+        Standard Button Inputs
+  --]]
+  if a == 'no input' then
+    -- No input Action
+
+  else if a == 'A' then
+    -- A attack Action
+
+  else if a == 'B' then
+    -- B attack Action
+
+  else if a == 'R' then
+    -- R grab Action
+
+  else if a == 'Z' then
+    -- Z shield Action
+
+  --[[
+        Plain Directions
+  --]]
+  else if a == 'up full' then
+    -- Move up fully Action
+
+  else if a == 'up half' then
+    -- Move up half Action
+
+  else if a == 'up right full' then
+    -- Move up right fully Action
+  
+  else if a == 'up right half' then
+    -- Move up right half Action
+
+  else if a == 'right full' then
+    -- Move right fully Action
+  
+  else if a == 'right half' then
+    -- Move right half Action
+
+  else if a == 'down right full' then 
+    -- Move down right fully Action
+
+  else if a == 'down right half' then
+    -- Move down right half Action
+
+  else if a == 'down full' then
+    -- Move down fully half Action
+
+  else if a == 'down half' then
+    -- Move down half Action
+
+  else if a == 'down left full' then
+    -- Move down left fully Action
+
+  else if a == 'down left half' then
+    -- Move down left half Action
+
+  else if a == 'left full' then
+    -- Move left fully Action
+
+  else if a == 'left half' then
+    -- Move left half Action
+
+  else if a == 'up left full' then
+    -- Move up left fully Action
+
+  else if a == 'up left half' then
+    -- Move up left half Action
+
+  else if a == 'up left full' then
+    -- Move up left fully Action
+
+  else if a == 'up left half' then
+    -- Move up left half
+
+  
+  --[[
+        Directional Attacks
+  --]]
+  else if a == ''
+
 -- Performs a step in the environment
 environ.step = function(s, a)
   -- Current state
