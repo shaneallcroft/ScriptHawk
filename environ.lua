@@ -1,5 +1,5 @@
 local environ = {}
-
+local math = require "math"
 -- States are a tuple of dealer's first card (1-10) and the player's sum
 -- Set of actions
 
@@ -213,8 +213,12 @@ environ.isTerminal = function(a, r)
   return a == 'stick' or r == -1
 end
 
-local environ.cartesianDistanceFromEnemy = function(currentX, currentY)
-    
+local environ.cartesianDistanceFromEnemy = function()
+    Xdiff = self_x - enemy_x
+    Ydiff = self_y - enemy_y
+    XdiffSquared = Xdiff * Xdiff
+    YdiffSquared = Ydiff * Ydiff
+    return math.sqrt(XdiffSquared + YdiffSquared)
 end
 
 return environ
