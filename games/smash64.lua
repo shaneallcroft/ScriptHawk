@@ -1201,121 +1201,18 @@ function Game.updateDat()
 	enemy_name = Game.getCharacter(player_enemy)
 	
 	if self_deaths >= 3 or enemy_deaths >= 3 then
-		local filename = Game.characters[test_itr] + _ + difficulty
+	
+		print(test_itr)
+		local filename = "..\\N64\\State\\" .. Game.characters[test_itr] .. "_" .. difficulty .. ".State"
 		savestate.load(filename);
-		if test_itr == 11 then
-			test_itr = 0
-			difficulty = difficulty + 1
-		end
-		--[[if test_itr == 0 then
-			savestate.load("fox_1");
-		end
-		if test_itr == 1 then	
-			savestate.load("mario_1");
-		end
-		if test_itr == 2 then	
-			savestate.load("falcon_1");
-		end
-		if test_itr == 3 then	
-			savestate.load("dk_1");
-		end
-		if test_itr == 4 then	
-			savestate.load("ness_1");
-		end
-		if test_itr == 5 then	
-			savestate.load("jigglypuff_1");
-		end
-		if test_itr == 6 then	
-			savestate.load("pikachu_1");
-		end
-		if test_itr == 7 then	
-			savestate.load("kirby_1");
-		end
-		if test_itr == 8 then	
-			savestate.load("luigi_1");
-		end
-		if test_itr == 9 then	
-			savestate.load("link_1");
-		end
-		if test_itr == 10 then	
-			savestate.load("yoshi_1");
-		end
-		if test_itr == 11 then	
-			savestate.load("samus_1");
-		end
+		test_itr = test_itr + 1
 		if test_itr == 12 then
-			savestate.load("fox_2");
-		end
-		if test_itr == 13 then	
-			savestate.load("mario_2");
-		end
-		if test_itr == 14 then	
-			savestate.load("falcon_2");
-		end
-		if test_itr == 15 then	
-			savestate.load("dk_2");
-		end
-		if test_itr == 16 then	
-			savestate.load("ness_2");
-		end
-		if test_itr == 17 then	
-			savestate.load("jigglypuff_2");
-		end
-		if test_itr == 18 then	
-			savestate.load("pikachu_2");
-		end
-		if test_itr == 19 then	
-			savestate.load("kirby_2");
-		end
-		if test_itr == 20 then	
-			savestate.load("luigi_2");
-		end
-		if test_itr == 21 then	
-			savestate.load("link_2");
-		end
-		if test_itr == 22 then	
-			savestate.load("yoshi_2");
-		end
-		if test_itr == 23 then	
-			savestate.load("samus_2");
-		end
-		if test_itr == 24 then
-			savestate.load("fox_3");
-		end
-		if test_itr == 25 then	
-			savestate.load("mario_2");
-		end
-		if test_itr == 14 then	
-			savestate.load("falcon_2");
-		end
-		if test_itr == 15 then	
-			savestate.load("dk_2");
-		end
-		if test_itr == 16 then	
-			savestate.load("ness_2");
-		end
-		if test_itr == 17 then	
-			savestate.load("jigglypuff_2");
-		end
-		if test_itr == 18 then	
-			savestate.load("pikachu_2");
-		end
-		if test_itr == 19 then	
-			savestate.load("kirby_2");
-		end
-		if test_itr == 20 then	
-			savestate.load("luigi_2");
-		end
-		if test_itr == 21 then	
-			savestate.load("link_2");
-		end
-		if test_itr == 22 then	
-			savestate.load("yoshi_2");
-		end
-		if test_itr == 23 then	
-			savestate.load("samus_2");
-		end--]]
-		
+			difficulty = difficulty + 1
+			if difficulty = 5 then
+				difficulty = 1
+			end
+			test_itr = 0
+		end	
 	end
 end
 

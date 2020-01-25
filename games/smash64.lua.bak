@@ -1151,6 +1151,8 @@ self_yvel = Game.getYVelocity(player_self)
 enemy_xvel = Game.getXVelocity(player_enemy)
 enemy_yvel = Game.getYVelocity(player_enemy)
 enemy_name = Game.getCharacter(player_enemy)
+test_itr = 0
+difficulty = 1
 
 function Game.scoreCompare()
 		score_points = score_points - 1
@@ -1198,9 +1200,21 @@ function Game.updateDat()
 	enemy_movement = Game.getMovementState(player_enemy)
 	enemy_name = Game.getCharacter(player_enemy)
 	
-	if self_deaths >= 3 or enemy_deaths >= 3{
-		savestate.load(
-	}
+	if self_deaths >= 3 or enemy_deaths >= 3 then
+	
+		print(test_itr)
+		local filename = "..\\N64\\State\\" .. Game.characters[test_itr] .. "_" .. difficulty .. ".State"
+		savestate.load(filename);
+		test_itr = test_itr + 1
+		if test_itr == 12 then
+			difficulty = difficulty + 1
+			if difficulty = 5 then
+				difficulty = 1
+			end
+			test_itr = 0
+		end	
+		
+	end
 end
 
 function Game.printDat()
