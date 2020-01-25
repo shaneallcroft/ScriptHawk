@@ -1198,9 +1198,8 @@ function Game.scoreCompare()
 		
 end
 function Game.printDat()
-	print("dX " ..self_xvel)
-	print("dY " ..self_yvel)
-	print("SD " ..self_sd)
+	print("dX" ..self_xvel)
+	print("dY" ..self_yvel)
 	print("")
 end
 	
