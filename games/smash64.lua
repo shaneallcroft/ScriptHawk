@@ -1022,8 +1022,8 @@ local playerOSD = {
 	[1] = {
 		{"P1", Game.getPlayerOSD, category="player", playerColors[1]},
 		{"Movement", Game.getMovementString, Game.colorMovementState, category="movement"},
-		{"Percent", 4, Game.colorMovementState, category="movement"},
-		{"Deaths", 4, Game.colorMovementState, category="movement"},
+		{"Percent", mainmemory.read_s32_be(0x0A4D74), Game.colorMovementState, category="speed"},
+		{"Deaths", mainmemory.read_s32_be(0x0A4D58), Game.colorMovementState, category="speed"},
 		
 		--{	"Frame", Game.getMovementFrame, category="movement"},
 		--{"Jumps", Game.getJumpCounter, category="movement"},
@@ -1204,7 +1204,7 @@ function Game.updateDat()
 	self_facing = Game.getYRotation(player_self)
 	enemy_facing = Game.getYRotation(player_enemy)
 	
-	if self_deaths >= 3 or enemy_deaths >= 3 then
+	if self_deaths >= 1 or enemy_deaths >= 1 then
 	
 		print(test_itr)
 		local filename = "..\\N64\\State\\" .. Game.characters[test_itr] .. "_" .. difficulty .. ".State"
@@ -1233,7 +1233,7 @@ function Game.eachFrame()
 	Game.scoreCompare();
 	Game.updateDat();
 	if(frameCount%300==0) then
-		Game.printDat();
+		--Game.printDat();
 	end
 	
 

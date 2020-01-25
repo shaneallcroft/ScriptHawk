@@ -30,12 +30,21 @@ local eps = 1e-20
 -- Entropy regularisation factor β
 local beta = 0.01
 
--- Create policy network π
-local net = nn.Sequential()
-net:add(nn.Linear(2, 16))
-net:add(nn.ReLU(true))
-net:add(nn.Linear(16, m))
-net:add(nn.SoftMax())
+PATH = "smashModel.pt"
+local net
+if os.isfile(PATH) then
+  net = torch.load(PATH)
+else
+
+  -- Create policy network π
+  net = nn.Sequential()
+  input = 15
+  net:add(nn.Linear(input, 16))
+  net:add(nn.ReLU(true))
+  net:add(nn.Linear(16, m))
+  net:add(nn.SoftMax())
+end
+
 -- Get network parameters θ
 local theta, gradTheta = net:getParameters()
 -- Moving average of squared gradient
@@ -150,3 +159,5 @@ gnuplot.title('Policy Gradient Results')
 gnuplot.ylabel('Result (Mean over 1000 Episodes)')
 gnuplot.xlabel('Episode (x1000)')
 gnuplot.plotflush()
+
+torch.save(net, PATH)
