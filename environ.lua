@@ -1,3 +1,5 @@
+local smash64 = require 'smash64'
+
 local environ = {}
 
 -- States are a tuple of dealer's first card (1-10) and the player's sum
@@ -45,126 +47,11 @@ environ.step = function(s,a)
 
   local sPrime = {}
 
-  --[[
-        Standard Button Inputs
-  --]]
-  if a == 'no input' then
-    -- No input Action
+  -- Enemy Death * (11000) + Self Death * (-10000) + Enemy Percent * (300) + Self Percent * (-143) + Self Destruct * (-30000) + 
+  local r = smash64.score_points
 
-  else if a == 'A' then
-    -- A attack Action
-
-  else if a == 'B' then
-    -- B attack Action
-
-  else if a == 'R' then
-    -- R grab Action
-
-  else if a == 'Z' then
-    -- Z shield Action
-
-  --[[
-        Plain Directions
-  --]]
-  else if a == 'up full' then
-    -- Move up fully Action
-
-  else if a == 'up half' then
-    -- Move up half Action
-
-  else if a == 'up right full' then
-    -- Move up right fully Action
-  
-  else if a == 'up right half' then
-    -- Move up right half Action
-
-  else if a == 'right full' then
-    -- Move right fully Action
-  
-  else if a == 'right half' then
-    -- Move right half Action
-
-  else if a == 'down right full' then 
-    -- Move down right fully Action
-
-  else if a == 'down right half' then
-    -- Move down right half Action
-
-  else if a == 'down full' then
-    -- Move down fully half Action
-
-  else if a == 'down half' then
-    -- Move down half Action
-
-  else if a == 'down left full' then
-    -- Move down left fully Action
-
-  else if a == 'down left half' then
-    -- Move down left half Action
-
-  else if a == 'left full' then
-    -- Move left fully Action
-
-  else if a == 'left half' then
-    -- Move left half Action
-
-  else if a == 'up left full' then
-    -- Move up left fully Action
-
-  else if a == 'up left half' then
-    -- Move up left half Action
-
-  else if a == 'up left full' then
-    -- Move up left fully Action
-
-  else if a == 'up left half' then
-    -- Move up left half
-
-  
-  --[[
-        Directional Attacks
-  --]]
-  else if a == 'A + up full' then
-    -- Move up fully and use A attack
-  
-  else if a == 'A + up half' then
-    -- Move up half and use A attack
-  
-  else if a == 'A + up right full' then
-    -- Move up right fully and use A attack
-
-  else if a == 'A + up right half' then
-    -- Move up right half and use A attack
-
-  else if a == 'A + right full' then
-    -- Move right fully and use A attack
-
-  else if a == 'A + right half' then
-    -- Move right half and use A attack
-    
-  else if a == 'A + down full' then
-    -- Move down fully and use A attack
-
-  else if a == 'A + down half' then
-    -- Move down half and use A attack
-
-  else if a == 'A + left full' then
-    -- Move left fully and use A attack
-
-  else if a == 'A + left half' then
-    -- Move left half and use A attack
-
-  else if a == 'B + up full' then
-    -- Move up fully and use B attack
-
-  else if a == 'B + down full' then
-    -- Move down fully and use B attack
-
-  else if a == 'Z + left full' then
-    -- Move left fully and use Z
-
-  else if a == 'Z + right full'
-    -- Move right fully and use Z
+  return sPrime, r
+end
 
 
 -- Performs a step in the environment
