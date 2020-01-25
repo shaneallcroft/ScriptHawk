@@ -2,14 +2,16 @@ local environ = {}
 
 -- States are a tuple of dealer's first card (1-10) and the player's sum
 -- Set of actions
+
 environ.A = {'no input', 'A', 'B', 'R', 'Z' --standard button inputs
              'up full', 'up half', 'up right full', 'up right half', 'right full', 'right half'--plain directions
              'down right full', 'down right half', 'down full', 'down half', 'down left full', 'down left half',
              'left full', 'left half', 'up left full', 'up left half'
-             'A + up full', 'A + up half', 'A + up right full', 'A + up right half', 'A + right full', 'A + right half'--directional attacks
-             'A + down right full', 'A + down right half', 'A + down full', 'A + down half', 'A + down left full', 'A + down left half',
-             'A + left full', 'A + left half', 'A + up left full', 'A + up left half'
-             'B + up full', 'B + down full'} --directional specials
+             'A + up full', 'A + up half', 'A + up right full', 'A + up right half', 'A + right full', --directional attacks 
+             'A + right half', 'A + down full', 'A + down half', 'A + left full', 'A + left half',
+             'B + up full', 'B + down full', --directional specials
+             'Z + left full', 'Z + right full'} --rolling
+-- 35 possible actions
 -- State transitions are not explicitly stored
 
 -- Draws a card (with replacement)
