@@ -1022,30 +1022,33 @@ local playerOSD = {
 	[1] = {
 		{"P1", Game.getPlayerOSD, category="player", playerColors[1]},
 		{"Movement", Game.getMovementString, Game.colorMovementState, category="movement"},
-		{"Frame", Game.getMovementFrame, category="movement"},
-		{"Jumps", Game.getJumpCounter, category="movement"},
+		{"Percent", self_percent, Game.colorMovementState, category="movement"},
+		{"Deaths", self_deaths, Game.colorMovementState, category="movement"},
+		
+		--{	"Frame", Game.getMovementFrame, category="movement"},
+		--{"Jumps", Game.getJumpCounter, category="movement"},
 		{"X", category="position"},
 		{"Y", category="position"},
-		{"dX", nil, Game.colorDX, category="positionStats"},
-		{"dY", nil, Game.colorDY, category="positionStats"},
+		--{"dX", nil, Game.colorDX, category="positionStats"},
+		--{"dY", nil, Game.colorDY, category="positionStats"},
 		{"X Velocity", Game.getXVelocity, category="speed"},
 		{"Y Velocity", Game.getYVelocity, category="speed"},
 		{"Facing", Game.getYRotation, category="angle"},
-		{"Shield", Game.getShieldSize, category="shield"},
+		--{"Shield", Game.getShieldSize, category="shield"},
 		{"Separator"},
 	},
 	[2] = {
-		{"P2", function() return Game.getPlayerOSD(2) end, category="player", playerColors[2]},
-		{"Movement", function() return Game.getMovementString(2) end, function() return Game.colorMovementState(2) end, category="movement"},
-		{"Frame", function() return Game.getMovementFrame(2) end, category="movement"},
-		{"Jumps", function() return Game.getJumpCounter(2) end, category="movement"},
-		{"X", function() return Game.getXPosition(2) end, category="position"},
-		{"Y", function() return Game.getYPosition(2) end, category="position"},
-		{"X Velocity", function() return Game.getXVelocity(2) end, category="speed"},
-		{"Y Velocity", function() return Game.getYVelocity(2) end, category="speed"},
-		{"Facing", function() return Game.getYRotation(2) end, category="angle"},
-		{"Shield", function() return Game.getShieldSize(2) end, category="shield"},
-		{"Separator"},
+		--{"P2", function() return Game.getPlayerOSD(2) end, category="player", playerColors[2]},
+		--{"Movement", function() return Game.getMovementString(2) end, function() return Game.colorMovementState(2) end, category="movement"},
+		--{"Frame", function() return Game.getMovementFrame(2) end, category="movement"},
+		--{"Jumps", function() return Game.getJumpCounter(2) end, category="movement"},
+		--{"X", function() return Game.getXPosition(2) end, category="position"},
+		--{"Y", function() return Game.getYPosition(2) end, category="position"},
+		--{"X Velocity", function() return Game.getXVelocity(2) end, category="speed"},
+		--{"Y Velocity", function() return Game.getYVelocity(2) end, category="speed"},
+		--{"Facing", function() return Game.getYRotation(2) end, category="angle"},
+		--{"Shield", function() return Game.getShieldSize(2) end, category="shield"},
+		--{"Separator"},
 	},
 	[3] = {
 		{"P3", function() return Game.getPlayerOSD(3) end, category="player", playerColors[3]},
@@ -1178,7 +1181,6 @@ function Game.scoreCompare()
 		end
 		
 		
-		
 end
 
 function Game.updateDat()
@@ -1199,21 +1201,23 @@ function Game.updateDat()
 	self_movement = Game.getMovementState(player_self)
 	enemy_movement = Game.getMovementState(player_enemy)
 	enemy_name = Game.getCharacter(player_enemy)
+	self_facing = Game.getYRotation(player_self)
+	enemy_facing = Game.getYRotation(player_enemy)
 	
 	if self_deaths >= 3 or enemy_deaths >= 3 then
 	
 		print(test_itr)
 		local filename = "..\\N64\\State\\" .. Game.characters[test_itr] .. "_" .. difficulty .. ".State"
 		savestate.load(filename);
+		mainmemory.write_s32_be(0x133420, 0)
 		test_itr = test_itr + 1
 		if test_itr == 12 then
 			difficulty = difficulty + 1
-			if difficulty = 5 then
+			if difficulty == 5 then
 				difficulty = 1
 			end
 			test_itr = 0
 		end	
-		
 	end
 end
 
@@ -1225,6 +1229,7 @@ function Game.printDat()
 end
 	
 function Game.eachFrame()
+	
 	Game.scoreCompare();
 	Game.updateDat();
 	if(frameCount%300==0) then
