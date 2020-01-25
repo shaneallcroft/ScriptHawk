@@ -30,12 +30,21 @@ local eps = 1e-20
 -- Entropy regularisation factor β
 local beta = 0.01
 
--- Create policy network π
-local net = nn.Sequential()
-net:add(nn.Linear(2, 16))
-net:add(nn.ReLU(true))
-net:add(nn.Linear(16, m))
-net:add(nn.SoftMax())
+PATH = "smashModel.pt"
+local net
+if os.isfile(PATH) then
+  net = torch.load(PATH)
+else
+
+  -- Create policy network π
+  net = nn.Sequential()
+  input = 15
+  net:add(nn.Linear(input, 16))
+  net:add(nn.ReLU(true))
+  net:add(nn.Linear(16, m))
+  net:add(nn.SoftMax())
+end
+
 -- Get network parameters θ
 local theta, gradTheta = net:getParameters()
 -- Moving average of squared gradient
@@ -47,6 +56,9 @@ local results = torch.Tensor(nEpisodes)
 -- Sample
 for i = 1, nEpisodes do
   --TODO: Start new game and load the new game's first state accordingly 
+
+
+
   -- Experience tuples (s, a, r)
   local E = {}
   -- {bot death state, bot damage taken, bot x pos, bot y, bot xvel, bot yvel, }
@@ -75,8 +87,16 @@ for i = 1, nEpisodes do
     -- Store experience tuple
     table.insert(E, {s, a, r})
 
-    -- Set next state as current state
+
+    -- Have player perform Action
+
+    -- Set new s based on new Action
+    s = { self_deaths, self_percent, self_x, self_y, self_xvel, self_yvel, 
+              enemy_deaths, enemy_percent, enemy_x, enemy_y, enemy_xvel, enemy_yvel, enemy_name} 
+
+    --[[ Set next state as current state
     s = sPrime
+    --]]
 
     -- Linearly decay ɛ
     epsilon = math.max(epsilon - epsilonDecay, epsilonMin)
@@ -139,3 +159,5 @@ gnuplot.title('Policy Gradient Results')
 gnuplot.ylabel('Result (Mean over 1000 Episodes)')
 gnuplot.xlabel('Episode (x1000)')
 gnuplot.plotflush()
+
+torch.save(net, PATH)
