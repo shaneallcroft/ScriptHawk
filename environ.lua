@@ -124,7 +124,48 @@ environ.step = function(s,a)
   --[[
         Directional Attacks
   --]]
-  else if a == ''
+  else if a == 'A + up full' then
+    -- Move up fully and use A attack
+  
+  else if a == 'A + up half' then
+    -- Move up half and use A attack
+  
+  else if a == 'A + up right full' then
+    -- Move up right fully and use A attack
+
+  else if a == 'A + up right half' then
+    -- Move up right half and use A attack
+
+  else if a == 'A + right full' then
+    -- Move right fully and use A attack
+
+  else if a == 'A + right half' then
+    -- Move right half and use A attack
+    
+  else if a == 'A + down full' then
+    -- Move down fully and use A attack
+
+  else if a == 'A + down half' then
+    -- Move down half and use A attack
+
+  else if a == 'A + left full' then
+    -- Move left fully and use A attack
+
+  else if a == 'A + left half' then
+    -- Move left half and use A attack
+
+  else if a == 'B + up full' then
+    -- Move up fully and use B attack
+
+  else if a == 'B + down full' then
+    -- Move down fully and use B attack
+
+  else if a == 'Z + left full' then
+    -- Move left fully and use Z
+
+  else if a == 'Z + right full'
+    -- Move right fully and use Z
+
 
 -- Performs a step in the environment
 environ.step = function(s, a)
