@@ -6,6 +6,9 @@ if type(ScriptHawk) ~= "table" then
 end
 
 local Game = {
+	player_self = Game.getPlayer(1)
+	player_enemy = Game.getPlayer(2)
+	
 	speedy_speeds = { .1, 1, 5, 10, 20, 35, 50, 75, 100 };
 	speedy_index = 6;
 	max_rot_units = 4,
@@ -1133,6 +1136,17 @@ Game.OSD = buildOSD(currentOSDBools, currentOSDCharacters);
 Game.hitboxWasChecked = false;
 
 function Game.eachFrame()
+	self_percent = mainmemory.read_s32_be(0x0A4D74)
+	enemy_percent = mainmemory.read_s32_be(0x0A4DD8)
+	self_deaths = mainmemory.read_s32_be(0x0A4D38)
+	enemy_deaths = mainmemory.read_s32_be(0x0A4D3C)
+	self_x = getX(player_self)
+	self_y = getY(player_self)
+	enemy_x = getX(player_enemy)
+	enemy_y = getY(player_enemy)
+	
+	
+
 	if ScriptHawk.UI.ischecked("toggle_hitboxes") then
 		Game.hitboxWasChecked = true;
 		Game.showHitboxes();
