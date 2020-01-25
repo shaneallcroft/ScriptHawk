@@ -24,7 +24,6 @@ local drawCard = function()
   else
     return {num, 'black'}
   end
-end
 
 -- Adds a card to an existing sum
 local addCard = function(sum, card)
@@ -171,6 +170,10 @@ end
 -- Calculates if the current state is terminal given previous action and reward
 environ.isTerminal = function(a, r)
   return a == 'stick' or r == -1
+end
+
+local environ.cartesianDistanceFromEnemy = function(currentX, currentY)
+    
 end
 
 return environ
