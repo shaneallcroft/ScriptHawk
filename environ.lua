@@ -42,18 +42,19 @@ local checkBust = function(sum)
 end
 
 -- Perform a step in the environment
-environ.step = function(s,a)
+environ.step = function(s,a, oldScore)
   -- Current state
 
   local sPrime = {}
 
   -- Enemy Death * (11000) + Self Death * (-10000) + Enemy Percent * (300) + Self Percent * (-143) + Self Destruct * (-30000) + 
-  local r = smash64.score_points
+  local r = smash64.score_points - oldScore
 
   return sPrime, r
 end
 
 
+--[[
 -- Performs a step in the environment
 environ.step = function(s, a)
   -- Current state
@@ -94,6 +95,7 @@ environ.step = function(s, a)
 
   return sPrime, r
 end
+]]--
 
 -- Calculates if the current state is terminal given previous action and reward
 environ.isTerminal = function(a, r)

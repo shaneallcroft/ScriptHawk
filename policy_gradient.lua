@@ -2,6 +2,7 @@
 local nn = require 'nn'
 local gnuplot = require 'gnuplot'
 local environ = require 'environ'
+local smash64 = require 'smash64'
 
 -- Set manual seed
 torch.manualSeed(1)
@@ -81,12 +82,9 @@ for i = 1, nEpisodes do
     end
     local a = environ.A[aIndex]
 
+    local oldS = s
+    local oldScore = smash64.score_points
     -- Perform a step
-    local sPrime, r = environ.step(s, a) -- r comes from score function f(s)
-
-    -- Store experience tuple
-    table.insert(E, {s, a, r})
-
 
     -- Have player perform Action
 
@@ -94,9 +92,12 @@ for i = 1, nEpisodes do
     s = { self_deaths, self_percent, self_x, self_y, self_xvel, self_yvel, 
               enemy_deaths, enemy_percent, enemy_x, enemy_y, enemy_xvel, enemy_yvel, enemy_name} 
 
-    --[[ Set next state as current state
-    s = sPrime
-    --]]
+
+    -- Score based on how well the action performed
+    local sPrime, r = environ.step(s, a, oldScore) -- r comes from score function f(s)
+
+    -- Store experience tuple
+    table.insert(E, {oldS, a, r})
 
     -- Linearly decay ɛ
     epsilon = math.max(epsilon - epsilonDecay, epsilonMin)
