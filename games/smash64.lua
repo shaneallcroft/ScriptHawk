@@ -1346,11 +1346,90 @@ function Game.eachFrame()
 	end
 
 	-- Perform Action A[aIndex]
-
+	--mapping action to actual controller input
+	input = {}
+	if a == 'no input' then
+		input[a] = false
+	else if a == 'up full'
+		input['Y Axis'] = 1.0
+	else if a == 'up half'
+		input['Y Axis'] = 0.5
+	else if a == 'up right full'
+		input['X Axis'] = 1.0
+		input['Y Axis'] = 1.0
+	else if a == 'up right half'
+		input['X Axis'] = 0.5
+		input['Y Axis'] = 0.5
+	else if a == 'right full'
+		input['X Axis'] = 1.0
+	else if a == 'right half'
+		input['X Axis'] = 0.5
+	else if a == 'down right full'
+		input['X Axis'] = 1.0
+		input['Y Axis'] = -1.0
+	else if a == 'down right half'
+		input['X Axis'] = 0.5
+		input['Y Axis'] = -0.5
+	else if a == 'down full'
+		input['Y Axis'] = -1.0
+	else if a == 'down half'
+		input['Y Axis'] = -0.5
+	else if a == 'down left full'
+		input['X Axis'] = -1.0
+		input['Y Axis'] = -1.0
+	else if a == 'down left half'
+		input['X Axis'] = -0.5
+		input['Y Axis'] = -0.5
+	else if a == 'left full'
+		input['X Axis'] = -1.0
+	else if a == 'left half'
+		input['X Axis'] = -0.5
+	else if a == 'up left full'
+		input['X Axis'] = -1.0
+		input['Y Axis'] = 1.0
+	else if a == 'up left half'
+		input['X Axis'] = -0.5
+		input['Y Axis'] = 0.5
+	else if a == 'A + up full'
+		input['P1 A'] = true
+		input['Y Axis'] = 1.0
+	else if a == 'A + up half'
+		input['P1 A'] = true
+		input['Y Axis'] = 0.5
+	else if a == 'A + right full'
+		input['P1 A'] = true
+		input['X Axis'] = 1.0
+	else if a == 'A + right half'
+		input['P1 A'] = true
+		input['X Axis'] = 0.5
+	else if a == 'A + down full'
+		input['P1 A'] = true
+		input['Y Axis'] = -1.0
+	else if a == 'A + down half'
+		input['P1 A'] = true
+		input['Y Axis'] = -0.5
+	else if a == 'A + left full'
+		input['P1 A'] = true
+		input['X Axis'] = -1.0
+	else if a == 'A + left half'
+		input['P1 A'] = true
+		input['X Axis'] = -0.5
+	else if a == 'B + up full'
+		input['P1 B'] = true
+		input['Y Axis'] = 1.0
+	else if a == 'B + down full'
+		input['P1 B'] = true
+		input['Y Axis'] = -1.0
+	else if a == 'Z + right full'
+		input['P1 Z'] = true
+		input['X Axis'] = -1.0
+	else if a == 'Z + left full'
+		input['P1 Z'] = true
+		input['X Axis'] = 1.0
+	else
+		input[a] = true
+	end
 	Game.updateDat();
-	
-	
-	
 	
 	if(frameCount%300==0) then
 		--Game.printDat();
