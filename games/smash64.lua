@@ -554,6 +554,10 @@ function Game.getScore(player)
 	return score_points
 end
 
+function Game.getPercent(player)
+	return mainmemory.read_s32_be(0x0A4D74)
+end
+
 function Game.getCharacter(player)
 	local playerActor = Game.getPlayer(player);
 	if isRDRAM(playerActor) then
@@ -1027,7 +1031,7 @@ playerOSD = {
 		{"P1", Game.getPlayerOSD, category="player", playerColors[1]},
 		{"Score Points", Game.getScore, category="speed"},
 		{"Movement", Game.getMovementString, Game.colorMovementState, category="movement"},
-		{"Percent", mainmemory.read_s32_be(0x0A4D74), Game.colorMovementState, category="speed"},
+		{"Percent", Game.getPercent, category="speed"},
 		
 		--{	"Frame", Game.getMovementFrame, category="movement"},
 		--{"Jumps", Game.getJumpCounter, category="movement"},
@@ -1126,7 +1130,7 @@ local function buildOSD(OSDBools, OSDCharacters)
 		if OSDBools[i] then
 			OSD = table.join(OSD, playerOSD[i]);
 			if OSDCharacters[i] == 0x05 then -- Link
-				OSD = table.join(OSD, boomerangOSD[i]);
+				--OSD = table.join(OSD, boomerangOSD[i]);
 			end
 		end
 	end
@@ -1221,7 +1225,7 @@ function Game.updateDat()
 		test_itr = test_itr + 1
 		if test_itr == 12 then
 			difficulty = difficulty + 1
-			if difficulty == 5 then
+			if difficulty == 10 then
 				difficulty = 1
 			end
 			test_itr = 0
