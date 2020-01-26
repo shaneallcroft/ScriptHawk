@@ -560,6 +560,14 @@ function Game.getPlayer(player)
 	end
 end
 
+function Game.getScore(player)
+	return score_points
+end
+
+function Game.getPercent(player)
+	return mainmemory.read_s32_be(0x0A4D74)
+end
+
 function Game.getCharacter(player)
 	local playerActor = Game.getPlayer(player);
 	if isRDRAM(playerActor) then
@@ -1028,12 +1036,12 @@ function setCharacterAttribute(offset, value, player)
 	end
 end
 
-local playerOSD = {
+playerOSD = {
 	[1] = {
 		{"P1", Game.getPlayerOSD, category="player", playerColors[1]},
+		{"Score Points", Game.getScore, category="speed"},
 		{"Movement", Game.getMovementString, Game.colorMovementState, category="movement"},
-		{"Percent", mainmemory.read_s32_be(0x0A4D74), Game.colorMovementState, category="speed"},
-		{"Deaths", mainmemory.read_s32_be(0x0A4D58), Game.colorMovementState, category="speed"},
+		{"Percent", Game.getPercent, category="speed"},
 		
 		--{	"Frame", Game.getMovementFrame, category="movement"},
 		--{"Jumps", Game.getJumpCounter, category="movement"},
@@ -1132,7 +1140,7 @@ local function buildOSD(OSDBools, OSDCharacters)
 		if OSDBools[i] then
 			OSD = table.join(OSD, playerOSD[i]);
 			if OSDCharacters[i] == 0x05 then -- Link
-				OSD = table.join(OSD, boomerangOSD[i]);
+				--OSD = table.join(OSD, boomerangOSD[i]);
 			end
 		end
 	end
@@ -1181,7 +1189,7 @@ function Game.scoreCompare()
 		if self_difference_deaths > 0 then
 			score_points = score_points - (self_difference_deaths * 10000)
 		end
-		enemy_difference_deaths = mainmemory.read_s32_be(0x0A4DD8) - enemy_deaths
+		enemy_difference_deaths = mainmemory.read_s32_be(0x0A4D3C) - enemy_deaths
 		if enemy_difference_deaths > 0 then
 			score_points = score_points + (enemy_difference_deaths * 11000)
 		end
@@ -1190,6 +1198,11 @@ function Game.scoreCompare()
 			score_points = score_points - (self_difference_deaths * 30000)
 		end
 		
+		self_difference_hp = 0
+		self_difference_deaths = 0
+		Enemy_difference_hp = 0
+		Enemy_difference_deaths = 0
+		self_difference_sd = 0
 		
 end
 
@@ -1215,6 +1228,7 @@ function Game.updateDat()
 	enemy_facing = Game.getYRotation(player_enemy)
 	
 	if self_deaths >= 1 or enemy_deaths >= 1 then
+<<<<<<< HEAD
 		episode_count = episode_count + 1
 		current_episode_state_count = 0
 
@@ -1270,6 +1284,9 @@ function Game.updateDat()
 		
 
 		print(test_itr)
+=======
+	
+>>>>>>> 422cfea4f3d9e128836e60c053ec0219b073c894
 		local filename = "..\\N64\\State\\" .. Game.characters[test_itr] .. "_" .. difficulty .. ".State"
 		savestate.load(filename);
 		mainmemory.write_s32_be(0x133420, 0)
@@ -1283,7 +1300,7 @@ function Game.updateDat()
 		test_itr = test_itr + 1
 		if test_itr == 12 then
 			difficulty = difficulty + 1
-			if difficulty == 5 then
+			if difficulty == 10 then
 				difficulty = 1
 			end
 			test_itr = 0
@@ -1302,6 +1319,7 @@ end
 
 
 function Game.eachFrame()
+<<<<<<< HEAD
 	Game.scoreCompare()
 	if current_episode_state_count == 1 then 
 		aIndex = torch.random(1, _G.m)
@@ -1334,6 +1352,9 @@ function Game.eachFrame()
 
 	-- Perform Action A[aIndex]
 
+=======
+	Game.scoreCompare();
+>>>>>>> 422cfea4f3d9e128836e60c053ec0219b073c894
 	Game.updateDat();
 	
 	

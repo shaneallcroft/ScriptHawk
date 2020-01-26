@@ -550,6 +550,14 @@ function Game.getPlayer(player)
 	end
 end
 
+function Game.getScore(player)
+	return score_points
+end
+
+function Game.getPercent(player)
+	return mainmemory.read_s32_be(0x0A4D74)
+end
+
 function Game.getCharacter(player)
 	local playerActor = Game.getPlayer(player);
 	if isRDRAM(playerActor) then
@@ -1018,12 +1026,12 @@ function setCharacterAttribute(offset, value, player)
 	end
 end
 
-local playerOSD = {
+playerOSD = {
 	[1] = {
 		{"P1", Game.getPlayerOSD, category="player", playerColors[1]},
+		{"Score Points", Game.getScore, category="speed"},
 		{"Movement", Game.getMovementString, Game.colorMovementState, category="movement"},
-		{"Percent", mainmemory.read_s32_be(0x0A4D74), Game.colorMovementState, category="speed"},
-		{"Deaths", mainmemory.read_s32_be(0x0A4D58), Game.colorMovementState, category="speed"},
+		{"Percent", Game.getPercent, category="speed"},
 		
 		--{	"Frame", Game.getMovementFrame, category="movement"},
 		--{"Jumps", Game.getJumpCounter, category="movement"},
@@ -1122,7 +1130,7 @@ local function buildOSD(OSDBools, OSDCharacters)
 		if OSDBools[i] then
 			OSD = table.join(OSD, playerOSD[i]);
 			if OSDCharacters[i] == 0x05 then -- Link
-				OSD = table.join(OSD, boomerangOSD[i]);
+				--OSD = table.join(OSD, boomerangOSD[i]);
 			end
 		end
 	end
@@ -1171,7 +1179,7 @@ function Game.scoreCompare()
 		if self_difference_deaths > 0 then
 			score_points = score_points - (self_difference_deaths * 10000)
 		end
-		enemy_difference_deaths = mainmemory.read_s32_be(0x0A4DD8) - enemy_deaths
+		enemy_difference_deaths = mainmemory.read_s32_be(0x0A4D3C) - enemy_deaths
 		if enemy_difference_deaths > 0 then
 			score_points = score_points + (enemy_difference_deaths * 11000)
 		end
@@ -1180,6 +1188,11 @@ function Game.scoreCompare()
 			score_points = score_points - (self_difference_deaths * 30000)
 		end
 		
+		self_difference_hp = 0
+		self_difference_deaths = 0
+		Enemy_difference_hp = 0
+		Enemy_difference_deaths = 0
+		self_difference_sd = 0
 		
 end
 
@@ -1206,7 +1219,6 @@ function Game.updateDat()
 	
 	if self_deaths >= 1 or enemy_deaths >= 1 then
 	
-		print(test_itr)
 		local filename = "..\\N64\\State\\" .. Game.characters[test_itr] .. "_" .. difficulty .. ".State"
 		savestate.load(filename);
 		mainmemory.write_s32_be(0x133420, 0)
@@ -1229,11 +1241,10 @@ function Game.printDat()
 end
 	
 function Game.eachFrame()
-	
 	Game.scoreCompare();
 	Game.updateDat();
 	if(frameCount%300==0) then
-		Game.printDat();
+		--Game.printDat();
 	end
 	
 
