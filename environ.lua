@@ -19,6 +19,7 @@ local drawCard = function()
   else
     return {num, 'black'}
   end
+end
 
 -- Adds a card to an existing sum
 local addCard = function(sum, card)
@@ -95,7 +96,7 @@ environ.isTerminal = function(a, r)
   return a == 'stick' or r == -1
 end
 
-local environ.cartesianDistanceFromEnemy = function()
+environ.cartesianDistanceFromEnemy = function()
     Xdiff = self_x - enemy_x
     Ydiff = self_y - enemy_y
     XdiffSquared = Xdiff * Xdiff
