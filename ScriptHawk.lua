@@ -3,6 +3,7 @@ local nn = require 'nn'
 local gnuplot = require 'gnuplot'
 local environ = require 'environ'
 local smash64 = require 'smash64'
+local os = requires 'os'
 -------------------
 -- Version Check --
 -------------------
@@ -2045,8 +2046,10 @@ _G.eps = 1e-20
 -- Entropy regularisation factor β
 _G.beta = 0.01
 
-PATH = "smashModel.pt"
-_G.net
+local PATH = "smashModel.pt"
+
+_G.net = {}
+
 if os.isfile(PATH) then
   net = torch.load(PATH)
 else

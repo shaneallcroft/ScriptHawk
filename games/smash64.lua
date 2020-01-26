@@ -1228,7 +1228,6 @@ function Game.updateDat()
 	enemy_facing = Game.getYRotation(player_enemy)
 	
 	if self_deaths >= 1 or enemy_deaths >= 1 then
-<<<<<<< HEAD
 		episode_count = episode_count + 1
 		current_episode_state_count = 0
 
@@ -1284,9 +1283,6 @@ function Game.updateDat()
 		
 
 		print(test_itr)
-=======
-	
->>>>>>> 422cfea4f3d9e128836e60c053ec0219b073c894
 		local filename = "..\\N64\\State\\" .. Game.characters[test_itr] .. "_" .. difficulty .. ".State"
 		savestate.load(filename);
 		mainmemory.write_s32_be(0x133420, 0)
@@ -1319,7 +1315,6 @@ end
 
 
 function Game.eachFrame()
-<<<<<<< HEAD
 	Game.scoreCompare()
 	if current_episode_state_count == 1 then 
 		aIndex = torch.random(1, _G.m)
@@ -1352,9 +1347,6 @@ function Game.eachFrame()
 
 	-- Perform Action A[aIndex]
 
-=======
-	Game.scoreCompare();
->>>>>>> 422cfea4f3d9e128836e60c053ec0219b073c894
 	Game.updateDat();
 	
 	
