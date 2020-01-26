@@ -3,7 +3,7 @@ local nn = require 'nn'
 --local gnuplot = require 'gnuplot'
 local environ = require 'environ'
 local smash64 = require 'smash64'
-local os = requires 'os'
+local os = require 'os'
 -------------------
 -- Version Check --
 -------------------

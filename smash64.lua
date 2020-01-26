@@ -1323,7 +1323,7 @@ function Game.eachFrame()
 	else 
 		s = { self_deaths, self_percent, self_x, self_y, self_xvel, self_yvel, 
 		enemy_deaths, enemy_percent, enemy_x, enemy_y, enemy_xvel, enemy_yvel, enemy_name} 
-		local sPrime, r = environ.step(oldS, a, oldScore)
+		local sPrime, r = environ.step(oldS, a, score_points, oldScore)
 		table.insert(E, {oldS, a, r})
 
 		epsilon = math.max(_G.epsilon - _G.epsilonDecay, _G.epsilonMin)
