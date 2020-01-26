@@ -1,5 +1,3 @@
-local smash64 = require 'smash64'
-
 local environ = {}
 local math = require "math"
 -- States are a tuple of dealer's first card (1-10) and the player's sum
@@ -36,13 +34,13 @@ local checkBust = function(sum)
 end
 
 -- Perform a step in the environment
-environ.step = function(s,a, oldScore)
+environ.step = function(s,a, newScore, oldScore)
   -- Current state
 
   local sPrime = {}
 
   -- Enemy Death * (11000) + Self Death * (-10000) + Enemy Percent * (300) + Self Percent * (-143) + Self Destruct * (-30000) + 
-  local r = smash64.score_points - oldScore
+  local r = newScore - oldScore
 
   return sPrime, r
 end
