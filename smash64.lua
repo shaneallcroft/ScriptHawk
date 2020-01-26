@@ -1,4 +1,4 @@
-local ScriptHawk = require 'ScriptHawk'
+--local ScriptHawk = require 'ScriptHawk'
 
 --neural net implementation current episode 
 episode_count = 0

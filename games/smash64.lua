@@ -1,3 +1,12 @@
+
+--neural net implementation current episode 
+episode_count = 0
+current_episode_state_count = 0
+s = { self_deaths, self_percent, self_x, self_y, self_xvel, self_yvel, 
+              enemy_deaths, enemy_percent, enemy_x, enemy_y, enemy_xvel, enemy_yvel, enemy_name}
+E = {}
+r = nil
+oldS = nil
 if type(ScriptHawk) ~= "table" then
 	print("This script is not designed to run by itself");
 	print("Please run ScriptHawk.lua from the parent directory instead");
@@ -1218,14 +1227,75 @@ function Game.updateDat()
 	enemy_facing = Game.getYRotation(player_enemy)
 	
 	if self_deaths >= 1 or enemy_deaths >= 1 then
-	
+		episode_count = episode_count + 1
+		current_episode_state_count = 0
+
+		-- Save result of episode
+		results[i] = E[#E][3]
+  
+		-- Reset ∇θ
+		_G.gradTheta:zero()
+		
+		-- Learn from experience of one complete episode
+		for j = 1, #E do
+		  -- Extract experience
+		  local s = E[j][1]
+		  local a = E[j][2]
+		  -- Get action index
+		  local aIndex = _.find(environ.A, a)
+	  
+		  -- Calculate variance-reduced reward (advantage) ∑t r - b(s) = ∑t r - V(s) = A
+		  local A = 0
+		  for k = j, #E do
+			A = A + (E[k][3] - V[s[1]][s[2]])
+		  end
+	  
+		  -- Use a policy gradient update (REINFORCE rule): ∇θ Es[f(s)] = ∇θ ∑s p(s)f(s) = Es[f(s) ∇θ logp(s)]
+		  local input = torch.Tensor(s)
+		  local output = net:forward(input)
+		  output:add(eps) -- Add small probability to prevent NaNs
+	  
+		  -- ∇θ logp(s) = 1/p(a) for chosen a, 0 otherwise
+		  local target = torch.zeros(m)
+		  target[aIndex] = A * 1/output[aIndex] -- f(s) ∇θ logp(s)
+	  
+		  -- Calculate gradient of entropy of policy: -logp(s) - 1
+		  local gradEntropy = -torch.log(output) - 1
+		  -- Add to target to improve exploration (prevent convergence to suboptimal deterministic policy)
+		  target:add(_G.beta * gradEntropy)
+		  
+		  -- Accumulate gradients
+		  net:backward(input, target)
+		end
+	  
+		-- Update moving average of squared gradients
+		gradThetaSq = _G.decay * _G.gradThetaSq + (1 - _G.decay) * torch.pow(_G.gradTheta, 2)
+		-- RMSProp update (gradient ascent version)
+		theta:add(torch.cdiv(_G.alpha * _G.gradTheta, torch.sqrt(_G.gradThetaSq) + _G.eps))
+
+		if episode_count > _G.nEpisodes then
+			PATH = "smashModel.pt"
+			
+			torch.save(_G.net, PATH)
+		end
+
+		
+
+		print(test_itr)
 		local filename = "..\\N64\\State\\" .. Game.characters[test_itr] .. "_" .. difficulty .. ".State"
 		savestate.load(filename);
 		mainmemory.write_s32_be(0x133420, 0)
+
+		-- Set Defaults for New Episode
+		E = {}
+		s = { self_deaths, self_percent, self_x, self_y, self_xvel, self_yvel, 
+              enemy_deaths, enemy_percent, enemy_x, enemy_y, enemy_xvel, enemy_yvel, enemy_name}
+
+
 		test_itr = test_itr + 1
 		if test_itr == 12 then
 			difficulty = difficulty + 1
-			if difficulty == 5 then
+			if difficulty == 10 then
 				difficulty = 1
 			end
 			test_itr = 0
@@ -1240,13 +1310,50 @@ function Game.printDat()
 	print("")
 end
 	
+
+
+
 function Game.eachFrame()
-	Game.scoreCompare();
+	Game.scoreCompare()
+	if current_episode_state_count == 1 then 
+		aIndex = torch.random(1, _G.m)
+		a = environ.A[aIndex]
+		oldS = s
+	else 
+		s = { self_deaths, self_percent, self_x, self_y, self_xvel, self_yvel, 
+		enemy_deaths, enemy_percent, enemy_x, enemy_y, enemy_xvel, enemy_yvel, enemy_name} 
+		local sPrime, r = environ.step(oldS, a, score_points, oldScore)
+		table.insert(E, {oldS, a, r})
+
+		epsilon = math.max(_G.epsilon - _G.epsilonDecay, _G.epsilonMin)
+
+		local aIndex
+    	if torch.uniform() < (1 - _G.epsilon) then -- Exploit with probability 1 - ɛ
+      		-- Get categorical action distribution from π = p(s; θ)
+      		local probs = net:forward(torch.Tensor(s))
+      		probs:add(_G.eps) -- Add small probability to prevent NaNs
+      		-- Sample action ~ p(s; θ)
+      		aIndex = torch.multinomial(probs, 1)[1]
+    	else
+      		-- Otherwise pick any action with probability 1/m
+      		aIndex = torch.random(1, _G.m)
+    	end
+    	local a = environ.A[aIndex]
+
+    	local oldS = s
+    	local oldScore = smash64.score_point	
+	end
+
+	-- Perform Action A[aIndex]
+
 	Game.updateDat();
+	
+	
+	
+	
 	if(frameCount%300==0) then
 		--Game.printDat();
 	end
-	
 
 	if ScriptHawk.UI.ischecked("toggle_hitboxes") then
 		Game.hitboxWasChecked = true;
