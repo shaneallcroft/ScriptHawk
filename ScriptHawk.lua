@@ -1,3 +1,8 @@
+local _ = require 'moses'
+local nn = require 'nn'
+local gnuplot = require 'gnuplot'
+local environ = require 'environ'
+local smash64 = require 'smash64'
 -------------------
 -- Version Check --
 -------------------
@@ -2010,12 +2015,68 @@ local function plot_pos()
 	end
 end
 
+print("here only once")
+--Initilize Neural Network
+
+-- Set manual seed
+torch.manualSeed(1)
+
+-- Load Q* from MC control
+local QStar = torch.load('Q.t7')
+-- Extract V as argmax Q
+local V = torch.max(QStar, 3):squeeze()
+
+_G.nEpisodes = 100
+-- Number of discrete actions
+_G.m = #environ.A
+
+-- Initial exploration ɛ
+_G.epsilon = 1
+-- Linear ɛ decay
+_G.epsilonDecay = 1/nEpisodes
+-- Minimum ɛ
+_G.epsilonMin = 0.05
+-- Constant step-size ɑ
+_G.alpha = 0.001
+-- RMSProp decay
+_G.decay = 0.9
+-- (Machine) epsilon
+_G.eps = 1e-20
+-- Entropy regularisation factor β
+_G.beta = 0.01
+
+PATH = "smashModel.pt"
+_G.net
+if os.isfile(PATH) then
+  net = torch.load(PATH)
+else
+
+  -- Create policy network π
+  net = nn.Sequential()
+  input = 15
+  net:add(nn.Linear(input, 16))
+  net:add(nn.ReLU(true))
+  net:add(nn.Linear(16, m))
+  net:add(nn.SoftMax())
+end
+
+-- Get network parameters θ
+local theta, gradTheta = net:getParameters()
+-- Moving average of squared gradient
+_G.gradThetaSq = torch.Tensor(gradTheta:size()):zero()
+
+-- Results from each episode
+local results = torch.Tensor(_G.nEpisodes)
+
+--Game Loops Start
 if type(Game.onLoadState) == "function" then
 	event.onloadstate(Game.onLoadState, "ScriptHawk - Game.onLoadState");
 end
 event.onloadstate(plot_pos, "ScriptHawk - Update position on load state");
 event.onframeend(mainloop, "ScriptHawk - Controller input handler");
 event.onframeend(plot_pos, "ScriptHawk - Update position each frame");
+
+
 
 --------------
 -- Keybinds --
